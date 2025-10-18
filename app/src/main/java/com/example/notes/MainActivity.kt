@@ -12,6 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.notes.ui.theme.NotesTheme
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -30,7 +34,25 @@ class Notes: Application() {
 
 
 
+@Composable
+fun AppNavHost(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = "home"
+    ) {
 
+        composable("home") {
+            ActionBar (
+                onNavigateToNote = { navController.navigate("note") }
+            )
+        }
+        composable("note") {
+            NoteScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+    }
+}
 
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +62,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NotesTheme {
-                ActionBar()
+                val navController = rememberNavController()
+                AppNavHost(navController)
 
             }
         }

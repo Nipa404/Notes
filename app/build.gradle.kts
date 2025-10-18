@@ -78,4 +78,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
 
+    // Jetpack Compose integration
+    val navVersion = "2.9.5"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
 }

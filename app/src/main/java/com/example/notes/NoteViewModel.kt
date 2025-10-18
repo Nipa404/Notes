@@ -22,6 +22,10 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
     private val _state = MutableStateFlow(NoteState())
     val state: StateFlow<NoteState> = _state
 
+    fun onTitleChange(text: String){
+        _state.update { it.copy(title = text) }
+    }
+
 
     fun openDialog() {
         _state.update { it.copy(popUpDialog = true) }
@@ -32,8 +36,8 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
     }
 
     fun addNote() {
-        _state.update { it.copy(popUpDialog = true) }
-        val currentHeader = state.value.otsikko
+
+        val currentHeader = state.value.title
 
         if(currentHeader == "") return
 
@@ -41,10 +45,8 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
             repo.addNote(Note(header = currentHeader, body = ""))
         }
 
-        _state.update { it.copy(teksti = "") }
+        _state.update { it.copy(title = "") }
         closeDialog()
-
-
     }
 
 
