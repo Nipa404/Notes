@@ -41,14 +41,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun ActionBar(viewModel: NoteViewModel = koinViewModel(), onNavigateToNote: () -> Unit ) {
+fun ActionBar(viewModel: NoteViewModel = koinViewModel(), onNavigateToNote: (Int) -> Unit ) {
     PopUpDialog()
     val listOfNotes by viewModel.listOfNotes.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     Scaffold(
         floatingActionButton = {
@@ -81,7 +85,7 @@ fun ActionBar(viewModel: NoteViewModel = koinViewModel(), onNavigateToNote: () -
                 ),
 
                 title = {
-                    Text(text = "Заметки")
+                    Text(text = "Notes")
                 }
             )
 
@@ -106,7 +110,14 @@ fun ActionBar(viewModel: NoteViewModel = koinViewModel(), onNavigateToNote: () -
                             .fillMaxWidth()
 
                             .padding(6.dp)
-                            .clickable(onClick = onNavigateToNote)
+                            .clickable {
+                                viewModel.noteNum(note.id)
+
+                                
+                                onNavigateToNote(note.id)
+
+
+                            }
                             .background(Color.Red)
                             .height(50.dp)
                             .border(
@@ -116,7 +127,8 @@ fun ActionBar(viewModel: NoteViewModel = koinViewModel(), onNavigateToNote: () -
 
 
                     ) {
-                        Text(text = note.header, color = Color.Black, modifier = Modifier .padding(3.dp) .align(Alignment.Center))
+                        Text(text = note.title, color = Color.Black, modifier = Modifier .padding(3.dp) .align(Alignment.Center))
+                        Text(text = state.content)
                     }
                 }
 

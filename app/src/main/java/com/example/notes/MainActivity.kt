@@ -12,10 +12,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.notes.ui.theme.NotesTheme
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -36,6 +39,8 @@ class Notes: Application() {
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
+
+
     NavHost(
         navController = navController,
         startDestination = "home"
@@ -43,12 +48,19 @@ fun AppNavHost(navController: NavHostController) {
 
         composable("home") {
             ActionBar (
-                onNavigateToNote = { navController.navigate("note") }
+                onNavigateToNote = { noteId -> navController.navigate("note/$noteId") }
             )
         }
-        composable("note") {
+        composable(
+            route = "note/{noteId}",
+            arguments = listOf(navArgument("noteId") {type = NavType.IntType }) ) { backStackEntry ->
+
+            val noteId = backStackEntry.arguments?.getInt("noteId")
+
+
             NoteScreen(
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateBack = { navController.popBackStack()},
+                noteId = noteId
             )
         }
     }

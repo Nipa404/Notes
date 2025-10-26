@@ -42,7 +42,7 @@ fun PopUpDialog(viewModel: NoteViewModel = koinViewModel()) {
             OutlinedCard {
                 Column {
                     Text(
-                        text = "Add note",
+                        text = "Add Title",
                         modifier = Modifier
 
                     )
@@ -65,6 +65,17 @@ fun PopUpDialog(viewModel: NoteViewModel = koinViewModel()) {
 
                 }
 
+                Column {
+                    Text(
+                        text = "Add Note",
+                        modifier = Modifier
+                    )
+
+                    OutlinedTextField(
+                        value = state.content,
+                        onValueChange = viewModel::onContentChange
+                    )
+                }
 
             }
 
