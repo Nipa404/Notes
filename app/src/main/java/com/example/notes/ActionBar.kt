@@ -56,7 +56,7 @@ fun ActionBar(viewModel: NoteViewModel = koinViewModel(), onNavigateToNote: (Int
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = {viewModel.openDialog()}) {
+            FloatingActionButton(onClick = viewModel::openDialog) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add note"
@@ -128,7 +128,6 @@ fun ActionBar(viewModel: NoteViewModel = koinViewModel(), onNavigateToNote: (Int
 
                     ) {
                         Text(text = note.title, color = Color.Black, modifier = Modifier .padding(3.dp) .align(Alignment.Center))
-                        Text(text = state.content)
                     }
                 }
 
