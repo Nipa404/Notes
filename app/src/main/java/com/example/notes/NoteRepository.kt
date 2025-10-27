@@ -10,6 +10,11 @@ class NoteRepository(private val dao: NoteDao) {
 
     fun getAllNotes(): Flow<List<Note>> = dao.getAllNotes()
 
+    suspend fun getOneNote(id: Int?): Note? {
+        return dao.getOneNote(id)
+
+    }
+
 
 
 }

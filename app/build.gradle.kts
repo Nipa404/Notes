@@ -63,7 +63,7 @@ dependencies {
     //UI material
     implementation("androidx.compose.material:material-icons-extended")
 
-    // Room
+    // Room & ksp
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
@@ -78,4 +78,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
 
+    // NAV
+    val navVersion = "2.9.5"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
 }
