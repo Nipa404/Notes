@@ -44,11 +44,12 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
 
         val currentHeader = state.value.title
         val currentContent = state.value.content
+        val currentId = state.value.noteNum
 
         if (currentHeader == "") return
 
         viewModelScope.launch {
-            repo.addNote(Note(title = currentHeader, content = currentContent))
+            repo.updateNote(Note(id = currentId ,title = currentHeader, content = currentContent))
         }
     }
 
@@ -69,15 +70,20 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
             popUpDialog = false
         ) }
 
-
-
-
     }
 
 
+    fun deleteNote() {
+        val currentHeader = state.value.title
+        val currentContent = state.value.content
+        val currentId = state.value.noteNum
 
 
 
+        viewModelScope.launch {
+            repo.deleteNote(Note(id = currentId, title = currentHeader, content = currentContent))
+        }
+    }
 
     fun noteNum(id: Int) {
         _state.update { it.copy(noteNum = id) }
@@ -93,7 +99,8 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
 
                 _state.update {it.copy(
                     title = note.title,
-                    content = note.content
+                    content = note.content,
+                    noteNum = note.id
                 )}
 
             }

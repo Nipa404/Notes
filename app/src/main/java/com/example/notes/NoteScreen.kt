@@ -1,5 +1,6 @@
 package com.example.notes
 
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab.toString
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -31,14 +33,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteScreen(viewModel: NoteViewModel = koinViewModel(), onNavigateBack: () -> Unit, noteId: Int?) {
+fun NoteScreen(
+    viewModel: NoteViewModel = koinViewModel(),
+    onNavigateBack: () -> Unit,
+    noteId: Int?
+) {
 
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(key1 = state.noteNum) {
+    val currentId = state.noteNum
+
+    LaunchedEffect(key1 = currentId) {
         viewModel.getOneNote(noteId)
     }
 
@@ -46,11 +55,24 @@ fun NoteScreen(viewModel: NoteViewModel = koinViewModel(), onNavigateBack: () ->
     Scaffold(
 
         floatingActionButton = {
-            FloatingActionButton(onClick = viewModel::saveNote) {
-                Icon(
-                    imageVector = Icons.Default.Save,
-                    contentDescription = "Save"
-                )
+            Row(modifier = Modifier.padding(4.dp)) {
+                FloatingActionButton(
+                    onClick = viewModel::saveNote
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Save,
+                        contentDescription = "Save"
+                    )
+                }
+                FloatingActionButton(onClick = {
+                    onNavigateBack()
+                    viewModel.deleteNote()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Delete"
+                    )
+                }
             }
         },
 
@@ -67,8 +89,7 @@ fun NoteScreen(viewModel: NoteViewModel = koinViewModel(), onNavigateBack: () ->
                 title = { Text(text = state.title) },
 
 
-
-            )
+                )
 
         }
     ) { innerPadding ->
@@ -83,11 +104,6 @@ fun NoteScreen(viewModel: NoteViewModel = koinViewModel(), onNavigateBack: () ->
         )
 
     }
-
-
-
-
-
 
 
 }
