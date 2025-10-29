@@ -51,6 +51,7 @@ import kotlinx.coroutines.launch
 
 fun ActionBar(viewModel: NoteViewModel = koinViewModel(), onNavigateToNote: (Int) -> Unit ) {
     PopUpDialog()
+
     val listOfNotes by viewModel.listOfNotes.collectAsState()
     val state by viewModel.state.collectAsState()
 

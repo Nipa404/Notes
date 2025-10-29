@@ -42,6 +42,7 @@ fun NoteScreen(
     onNavigateBack: () -> Unit,
     noteId: Int?
 ) {
+    askDeletePopUp()
 
     val state by viewModel.state.collectAsState()
 
@@ -65,8 +66,19 @@ fun NoteScreen(
                     )
                 }
                 FloatingActionButton(onClick = {
-                    onNavigateBack()
-                    viewModel.deleteNote()
+
+                    LaunchedEffect(key1 = state.delete) {
+
+                    }
+
+                    viewModel.openDeletePopUp()
+                    if(state.delete) {
+
+
+                        viewModel.deleteNote()
+                        onNavigateBack()
+                    }
+
                 }) {
                     Icon(
                         imageVector = Icons.Default.Delete,

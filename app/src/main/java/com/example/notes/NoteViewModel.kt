@@ -31,7 +31,7 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
         _state.update { it.copy(content = text) }
     }
 
-
+// AlertDialog stuff
     fun openDialog() {
         _state.update { it.copy(popUpDialog = true) }
     }
@@ -39,6 +39,18 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
     fun closeDialog() {
         _state.update { it.copy(popUpDialog = false) }
     }
+
+    fun openDeletePopUp() {
+        _state.update { it.copy(deletePopUp = true) }
+    }
+
+    fun closeDeletePopUp() {
+        _state.update { it.copy(deletePopUp = false) }
+    }
+
+
+
+
 
     fun saveNote() {
 
@@ -73,6 +85,15 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
     }
 
 
+    fun delete() {
+
+    }
+
+    fun deleteToTrue() {
+        _state.update { it.copy(delete = true) }
+    }
+
+
     fun deleteNote() {
         val currentHeader = state.value.title
         val currentContent = state.value.content
@@ -83,7 +104,11 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
         viewModelScope.launch {
             repo.deleteNote(Note(id = currentId, title = currentHeader, content = currentContent))
         }
+
+        _state.update { it.copy(delete = false) }
     }
+
+
 
     fun noteNum(id: Int) {
         _state.update { it.copy(noteNum = id) }
