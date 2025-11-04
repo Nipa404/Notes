@@ -9,7 +9,9 @@ data class NoteState(
     val title: String = "",
     val content: String = "",
     val noteNum: Int = 0,
-    val popUpDialog: Boolean = false
+    val popUpDialog: Boolean = false,
+    val deletePopUp: Boolean = false,
+    val toHome: Boolean = false
 
 
 

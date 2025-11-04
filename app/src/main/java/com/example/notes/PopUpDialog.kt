@@ -6,6 +6,7 @@ import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,22 +35,26 @@ fun PopUpDialog(viewModel: NoteViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
 
 
-    if(state.popUpDialog) {
+    if (state.popUpDialog) {
         BasicAlertDialog(
             onDismissRequest = { viewModel.closeDialog() },
+            modifier = Modifier.padding(8.dp)
 
-        ) {
+            ) {
             OutlinedCard {
                 Column {
-                    Text(
-                        text = "Add Title",
-                        modifier = Modifier
 
+                    OutlinedTextField(
+                        value = state.title,
+                        onValueChange = viewModel::onTitleChange,
+                        label = { Text(text = "Add title") }
                     )
                     Row {
+
                         OutlinedTextField(
-                            value = state.title,
-                            onValueChange = viewModel::onTitleChange
+                            value = state.content,
+                            onValueChange = viewModel::onContentChange,
+                            label = { Text(text = "Add Content") }
                         )
 
                         FloatingActionButton(onClick = { viewModel.addNote() }) {
@@ -61,26 +66,9 @@ fun PopUpDialog(viewModel: NoteViewModel = koinViewModel()) {
                         }
 
                     }
-
-
-                }
-
-                Column {
-                    Text(
-                        text = "Add Note",
-                        modifier = Modifier
-                    )
-
-                    OutlinedTextField(
-                        value = state.content,
-                        onValueChange = viewModel::onContentChange
-                    )
                 }
 
             }
-
-
-
 
 
         }

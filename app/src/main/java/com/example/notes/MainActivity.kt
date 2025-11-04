@@ -46,10 +46,13 @@ fun AppNavHost(navController: NavHostController) {
         startDestination = "home"
     ) {
 
+
+
         composable("home") {
             ActionBar (
                 onNavigateToNote = { noteId -> navController.navigate("note/$noteId") }
             )
+
         }
         composable(
             route = "note/{noteId}",
@@ -63,6 +66,7 @@ fun AppNavHost(navController: NavHostController) {
                 noteId = noteId
             )
         }
+
     }
 }
 

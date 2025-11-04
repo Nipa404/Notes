@@ -1,5 +1,6 @@
 package com.example.notes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,7 +32,7 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
         _state.update { it.copy(content = text) }
     }
 
-
+// AlertDialog stuff
     fun openDialog() {
         _state.update { it.copy(popUpDialog = true) }
     }
@@ -40,13 +41,33 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
         _state.update { it.copy(popUpDialog = false) }
     }
 
+    fun openDeletePopUp() {
+        _state.update { it.copy(deletePopUp = true) }
+    }
+
+    fun closeDeletePopUp() {
+        _state.update { it.copy(deletePopUp = false) }
+    }
+
+    fun saveNote() {
+
+        val currentHeader = state.value.title
+        val currentContent = state.value.content
+        val currentId = state.value.noteNum
+
+        if (currentHeader == "") return
+
+        viewModelScope.launch {
+            repo.updateNote(Note(id = currentId ,title = currentHeader, content = currentContent))
+        }
+    }
 
     fun addNote() {
 
         val currentHeader = state.value.title
         val currentContent = state.value.content
 
-        if(currentHeader == "" || currentContent == "") return
+        if(currentHeader == "") return
 
         viewModelScope.launch {
             repo.addNote(Note(title = currentHeader, content = currentContent))
@@ -54,17 +75,31 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
 
         _state.update { it.copy(
             title = "",
-            //content = "",
+            content = "",
             popUpDialog = false
         ) }
-
-
-
 
     }
 
 
 
+    fun toHome() {
+        _state.update { it.copy(toHome = true) }
+    }
+
+
+    fun deleteNote() {
+        val currentHeader = state.value.title
+        val currentContent = state.value.content
+        val currentId = state.value.noteNum
+
+        Log.d("del", currentId.toString())
+
+
+        viewModelScope.launch {
+            repo.deleteNote(Note(id = currentId, title = currentHeader, content = currentContent))
+        }
+    }
 
 
 
@@ -82,7 +117,8 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
 
                 _state.update {it.copy(
                     title = note.title,
-                    content = note.content
+                    content = note.content,
+                    noteNum = note.id
                 )}
 
             }
