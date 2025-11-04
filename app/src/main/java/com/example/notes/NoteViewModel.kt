@@ -1,5 +1,6 @@
 package com.example.notes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,10 +49,6 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
         _state.update { it.copy(deletePopUp = false) }
     }
 
-
-
-
-
     fun saveNote() {
 
         val currentHeader = state.value.title
@@ -85,12 +82,9 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
     }
 
 
-    fun delete() {
 
-    }
-
-    fun deleteToTrue() {
-        _state.update { it.copy(delete = true) }
+    fun toHome() {
+        _state.update { it.copy(toHome = true) }
     }
 
 
@@ -99,13 +93,12 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
         val currentContent = state.value.content
         val currentId = state.value.noteNum
 
+        Log.d("del", currentId.toString())
 
 
         viewModelScope.launch {
             repo.deleteNote(Note(id = currentId, title = currentHeader, content = currentContent))
         }
-
-        _state.update { it.copy(delete = false) }
     }
 
 

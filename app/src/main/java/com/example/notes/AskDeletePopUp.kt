@@ -1,6 +1,5 @@
 package com.example.notes
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.BasicAlertDialog
@@ -15,7 +14,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun askDeletePopUp(viewModel: NoteViewModel = koinViewModel()) {
+fun AskDeletePopUp(viewModel: NoteViewModel = koinViewModel()) {
 
     val state by viewModel.state.collectAsState()
 
@@ -32,14 +31,19 @@ fun askDeletePopUp(viewModel: NoteViewModel = koinViewModel()) {
                     Row {
 
                         FloatingActionButton(onClick = {
-                            viewModel.deleteToTrue()
+
+                            viewModel.deleteNote()
+                            viewModel.closeDeletePopUp()
+                            viewModel.toHome()
+
+
+
 
                         }) { Text(text = "Yes") }
 
                         FloatingActionButton(onClick = viewModel::closeDeletePopUp) { Text(text = "No") }
 
                     }
-
 
 
                 }

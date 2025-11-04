@@ -11,7 +11,7 @@ data class NoteState(
     val noteNum: Int = 0,
     val popUpDialog: Boolean = false,
     val deletePopUp: Boolean = false,
-    val delete: Boolean = false
+    val toHome: Boolean = false
 
 
 

@@ -1,5 +1,6 @@
 package com.example.notes
 
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.DefaultTab.AlbumsTab.toString
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,7 +44,8 @@ fun NoteScreen(
     onNavigateBack: () -> Unit,
     noteId: Int?
 ) {
-    askDeletePopUp()
+
+    AskDeletePopUp()
 
     val state by viewModel.state.collectAsState()
 
@@ -52,32 +55,22 @@ fun NoteScreen(
         viewModel.getOneNote(noteId)
     }
 
+    if (state.toHome) {
+        onNavigateBack()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { viewModel.saveNote() }
+    }
 
     Scaffold(
 
         floatingActionButton = {
-            Row(modifier = Modifier.padding(4.dp)) {
-                FloatingActionButton(
-                    onClick = viewModel::saveNote
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Save,
-                        contentDescription = "Save"
-                    )
-                }
                 FloatingActionButton(onClick = {
-
-                    LaunchedEffect(key1 = state.delete) {
-
-                    }
-
                     viewModel.openDeletePopUp()
-                    if(state.delete) {
+                    Log.d("del", state.noteNum.toString())
 
 
-                        viewModel.deleteNote()
-                        onNavigateBack()
-                    }
 
                 }) {
                     Icon(
@@ -85,7 +78,7 @@ fun NoteScreen(
                         contentDescription = "Delete"
                     )
                 }
-            }
+
         },
 
         topBar = {
@@ -99,6 +92,7 @@ fun NoteScreen(
                     }
                 },
                 title = { Text(text = state.title) },
+
 
 
                 )
