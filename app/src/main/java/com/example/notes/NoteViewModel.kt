@@ -48,29 +48,32 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
     fun closeDeletePopUp() {
         _state.update { it.copy(deletePopUp = false) }
     }
+    fun toHome() {//This takes user to homescreen when called
+        _state.update { it.copy(toHome = true) }
+    }
 
-    fun saveNote() {
+    fun saveNote() {//This function saves current changes to Note entity
 
-        val currentHeader = state.value.title
+        val currentTitle = state.value.title
         val currentContent = state.value.content
         val currentId = state.value.noteNum
 
-        if (currentHeader == "") return
+        if (currentTitle == "") return
 
         viewModelScope.launch {
-            repo.updateNote(Note(id = currentId ,title = currentHeader, content = currentContent))
+            repo.updateNote(Note(id = currentId ,title = currentTitle, content = currentContent))
         }
     }
 
-    fun addNote() {
+    fun addNote() {//This function saves new note to Note entity
 
-        val currentHeader = state.value.title
+        val currentTitle = state.value.title
         val currentContent = state.value.content
 
-        if(currentHeader == "") return
+        if(currentTitle == "") return
 
         viewModelScope.launch {
-            repo.addNote(Note(title = currentHeader, content = currentContent))
+            repo.addNote(Note(title = currentTitle, content = currentContent))
         }
 
         _state.update { it.copy(
@@ -81,15 +84,8 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
 
     }
 
-
-
-    fun toHome() {
-        _state.update { it.copy(toHome = true) }
-    }
-
-
-    fun deleteNote() {
-        val currentHeader = state.value.title
+    fun deleteNote() {//Deletes a note from Note entity
+        val currentTitle = state.value.title
         val currentContent = state.value.content
         val currentId = state.value.noteNum
 
@@ -97,17 +93,17 @@ class NoteViewModel(private val repo: NoteRepository): ViewModel() {
 
 
         viewModelScope.launch {
-            repo.deleteNote(Note(id = currentId, title = currentHeader, content = currentContent))
+            repo.deleteNote(Note(id = currentId, title = currentTitle, content = currentContent))
         }
     }
 
 
 
-    fun noteNum(id: Int) {
+    fun noteNum(id: Int) {//Keeps track of what note user is on
         _state.update { it.copy(noteNum = id) }
     }
 
-    fun getOneNote(id: Int?) {
+    fun getOneNote(id: Int?) {//Takes right data from Note entity using noteNum
 
         viewModelScope.launch {
             val note = repo.getOneNote(id)
